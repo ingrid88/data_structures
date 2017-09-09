@@ -1,4 +1,4 @@
-
+import copy
 # single linked
 # Think of this as a dictionary, set, map
 class List(object):
@@ -47,20 +47,18 @@ class List(object):
 			h = h.next		
 
 	def reverse_pointers(self):
-		h = self.head
-		count = 0
-		while h is not None:
-			a = h
-			b = h.next 
-			# first value
-			if count == 0:
-				a.next = None
-			# last value
-			if h.next is None:
-				self.head = h
-			a.next = None
-			b.next = first
-			h = h.next
+		n1 = self.head
+		n2 = n1.next 
+		n3 = n1.next.next
+		while n3 is not None:
+			n2.next = n1
+			if n1 == self.head:
+				n1.next = None
+			n1 = n2
+			n2 = n3
+			n3 = n3.next
+		n2.next = n1
+		self.head = n2
 
 
 	def contains_value(self,value):
@@ -126,6 +124,12 @@ l.add_value(3)
 l.print_list()
 l.reverse()
 l.print_list() # 1
+
+# l = List()
+# l.add_value(0)
+# l.add_value(1)
+# l.add_value(2)
+# l.print_list() # 1
 l.reverse_pointers()
 l.print_list() # 1
 
