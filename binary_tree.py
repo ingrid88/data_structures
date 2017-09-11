@@ -1,4 +1,4 @@
-# a data structure in which a record is linked to two successor records, 
+# Binary Tree: a data structure in which a record is linked to two successor records, 
 # usually referred to as the left branch when greater 
 # and the right when less than the previous record.
 
@@ -42,18 +42,20 @@ class Tree(object):
 
 
 	def print_tree(self):
-		pdb.set_trace()
 		nodes = [self.head]
-		print str(self.head.value)
+		values = [self.head.value]
+		count = 0
 		while len(nodes) > 0:
 			parent = nodes.pop(0)
 			if parent.children is not None:
-				s = ''
 				for child in parent.children:
 					if child is not None:
 						nodes.append(child) 
-						s += str(child.value) + " "
-				print s
+						values.append(child.value)
+			power = 2**count
+			count += 1		
+			print (" "*count).join([str(x) for x in values[0:power]])
+			values = values[power::]
 
 
 	def breadth_first_search(self, value):
@@ -90,13 +92,13 @@ class Node(object):
 
 		
 ####
-#.        4
-#.      /   \
-#.     5     2
-#.    / \   / \
-#    9   3 2   1
-#   /
-#  8
+#.         4
+#.       /   \
+#.      5     2
+#.    /   \   / \
+#    9     3 2   1
+#   / \   /
+#  8   3 13
 
 t = Tree()
 t.add_node(4)
@@ -107,4 +109,6 @@ t.add_node(3)
 t.add_node(2)
 t.add_node(1)
 t.add_node(8)
+t.add_node(3)
+t.add_node(13)
 t.print_tree()
