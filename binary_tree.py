@@ -2,7 +2,7 @@
 # usually referred to as the left branch when greater 
 # and the right when less than the previous record.
 
-####
+#### Eg binary tree
 #.     4
 #.   /   \
 #.  5     2
@@ -16,10 +16,13 @@ class Tree(object):
 		self.head = head
 
 	def add_node(self, value=None):
+		# Algorithm: 
 		# if no head, then add as head
-		# add node to shortest branch
+		# if first node has no children, add it
+		# if it does, pop it off and check if it has 2
+		# if it has 2, append them to the nodes
+		# if it doesn't, add the last child to the node 
 		placed = False
-		pdb.set_trace()
 		if self.head is None:
 			self.head = Node(value)
 		else:
@@ -39,9 +42,18 @@ class Tree(object):
 
 
 	def print_tree(self):
-		nodes = [[self.head]]
+		pdb.set_trace()
+		nodes = [self.head]
+		print str(self.head.value)
 		while len(nodes) > 0:
-			print node.value
+			parent = nodes.pop(0)
+			if parent.children is not None:
+				s = ''
+				for child in parent.children:
+					if child is not None:
+						nodes.append(child) 
+						s += str(child.value) + " "
+				print s
 
 
 	def breadth_first_search(self, value):
@@ -77,12 +89,22 @@ class Node(object):
 		pass
 
 		
+####
+#.        4
+#.      /   \
+#.     5     2
+#.    / \   / \
+#    9   3 2   1
+#   /
+#  8
 
 t = Tree()
-t.add_node(2)
-t.add_node(3)
-t.add_node(5)
 t.add_node(4)
-t.add_node(8)
+t.add_node(5)
+t.add_node(2)
+t.add_node(9)
+t.add_node(3)
+t.add_node(2)
 t.add_node(1)
-
+t.add_node(8)
+t.print_tree()
