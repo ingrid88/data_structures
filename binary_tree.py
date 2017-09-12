@@ -56,10 +56,26 @@ class Tree(object):
 
 	def delete_node(self, value):
 		# remove reference in both parent and child of each other 
-		node = breadth_first_search(self, value)
-		pdb.set_trace()
-		node.parent = None
-		node.parent.children.remove(node)
+		## Three cases
+		# leaf node
+
+		# has two children
+		node = self.breadth_first_search(self, value)
+
+		# has no children
+		if node.children is None:
+			node.parent.children.remove(node)
+			node.parent = None
+		# has one child
+		if len(node.children) == 1:
+			node.children[0].parent = node.parent
+			node.parent.children.remove(node)
+			node.parent.children.append(node.children[0])
+			node.parent = None
+		# has two children
+		if len(node.children) == 2:
+			
+
 
 
 	def max_depth_number_of_rows(self, node, count=1):
@@ -132,7 +148,16 @@ class Tree(object):
 
 
 	def depth_first_search(self, value):
-		pass
+		if node.children is None:
+			return None
+		else:
+			if len(node.children) == 1:
+				return self.max_depth_number_of_rows(node.children[0], count + 1)
+			if len(node.children) == 2:
+				return max(
+				self.max_depth_number_of_rows(node.children[0], count + 1), 
+				self.max_depth_number_of_rows(node.children[1], count + 1)
+			)
 	# median, mode, mean, find node, reorder, p
 
 
@@ -178,7 +203,7 @@ print "there are {} rows".format(t.number_of_rows([t.head]))
 print "there are {} rows".format(t.max_depth_number_of_rows(t.head))
 x = t.breadth_first_search(13)
 print x
-# t.delete_node(13)
+t.delete_node(3)
 t.print_tree_recursively([t.head])
 	# def calculate_rows(self):		
 	# 	nodes = [self.head]
