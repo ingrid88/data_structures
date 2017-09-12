@@ -30,12 +30,13 @@ class Tree(object):
 			nodes = [self.head]
 			while placed == False:
 				if  nodes[0].children is None:
-					nodes[0].children = [Node(value)]
+					nodes[0].children = [Node(value, parent=nodes[0])]
 					placed = True
 				else:
-					children = nodes.pop(0).children
+					node = nodes.pop(0)
+					children = node.children
 					if len(children) < 2:
-						children.append(Node(value))
+						children.append(Node(value, parent=node))
 						placed = True
 					else:
 						nodes.append(children[0])
@@ -48,26 +49,32 @@ class Tree(object):
 			if node.children is not None:
 				for child in node.children:
 					new_row_values.append(child)
-
 		if len(new_row_values) == 0:
 			return count
 		return self.number_of_rows(new_row_values, count+1)
 
 
-	def max_depth_number_of_rows(self, node, count=0):
+	def delete_node(self, value):
+		# remove reference in both parent and child of each other 
+		node = breadth_first_search(self, value)
+		pdb.set_trace()
+		node.parent = None
+		node.parent.children.remove(node)
+
+
+	def max_depth_number_of_rows(self, node, count=1):
 		# gets the max depth path from a specific node
 		# return depth from specified node
 		if node.children is None:
 			return count
 		else:
-			first_child = node.children[0] if node.children[0] is not None else None
-			second_child = node.children[1] if node.children[1] is not None else None
-			return max(
-				self.max_depth_number_of_rows(first_child, count + 1), 
-				self.max_depth_number_of_rows(second_child, count + 1)
+			if len(node.children) == 1:
+				return self.max_depth_number_of_rows(node.children[0], count + 1)
+			if len(node.children) == 2:
+				return max(
+				self.max_depth_number_of_rows(node.children[0], count + 1), 
+				self.max_depth_number_of_rows(node.children[1], count + 1)
 			)
-		pass
-
 
 
 	def print_tree_recursively(self, row_values=[], count=1):
@@ -113,13 +120,15 @@ class Tree(object):
 		nodes = [h]
 		while len(nodes) > 0:
 			node = nodes.pop(0)
-			print node
 			if node.value == value:
 				return node
 			else:
-				nodes.append(node.children)
-				print nodes
-		return False
+				if node.children is None:
+					continue
+				for child in node.children:
+					if child is not None:
+						nodes.append(child)
+		return None
 
 
 	def depth_first_search(self, value):
@@ -157,28 +166,20 @@ t.add_node(2)
 t.add_node(9)
 t.add_node(3)
 t.add_node(2)
-t.add_node(1)
-t.add_node(8)
-t.add_node(3)
-t.add_node(13)
-t.add_node(3)
-t.add_node(2)
-t.add_node(100)
-t.add_node(8)
-t.add_node(3)
-t.add_node(3)
-t.add_node(2)
-t.add_node(1)
-t.add_node(8)
-t.add_node(3)
-t.add_node(3)
+# t.add_node(1)
+# t.add_node(8)
+# t.add_node(3)
+# t.add_node(13)
+
 # t.print_tree()
 t.print_tree_recursively([t.head])
 
 print "there are {} rows".format(t.number_of_rows([t.head]))
-print t.max_depth_number_of_rows(t.head)
-
-
+print "there are {} rows".format(t.max_depth_number_of_rows(t.head))
+x = t.breadth_first_search(13)
+print x
+# t.delete_node(13)
+t.print_tree_recursively([t.head])
 	# def calculate_rows(self):		
 	# 	nodes = [self.head]
 	# 	values = [self.head.value]
