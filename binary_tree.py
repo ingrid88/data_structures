@@ -45,15 +45,15 @@ class BinaryTree(object):
 
 	def print_tree(self, row_values=[]):
 		new_row_values = []
-		pdb.set_trace()
+		# pdb.set_trace()
 		if row_values[0][0] == self.head:
-			nodes = [row_values[0]]
+			nodes = [row_values[0][0]]
 			print self.head.value
 		else:
-			nodes = [i for sub in row_values for i in sub]
+			nodes = [i for sub in row_values for i in sub if i is not None]
 			print " ".join("("+str(getattr(x,'value', 'None'))+" "+str(getattr(y,'value', 'None'))+")" for x,y in row_values)
 		for node in nodes:
-			new_row_values.append((node.left, node.right))
+			new_row_values.append((getattr(node,'left', None), getattr(node,'right', None)))
 		if len(new_row_values) == 0:
 			return 
 		return self.print_tree(new_row_values)
