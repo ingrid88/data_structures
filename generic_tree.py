@@ -142,17 +142,19 @@ class Tree(object):
 		return None
 
 
-	def depth_first_search(self, value):
+	def depth_first_search(self, node, value):
 		if node.children is None:
 			return None
 		else:
-			if len(node.children) == 1:
-				return self.max_depth_number_of_rows(node.children[0], count + 1)
-			if len(node.children) == 2:
-				return max(
-				self.max_depth_number_of_rows(node.children[0], count + 1), 
-				self.max_depth_number_of_rows(node.children[1], count + 1)
-			)
+			if node.left == value:
+				return node.left 
+			if node.right == value:
+				return node.right
+			else:
+				return 
+				self.depth_first_search(node.left, count + 1), 
+				self.depth_first_search(node.right, count + 1)
+			
 	# median, mode, mean, find node, reorder, p
 
 
