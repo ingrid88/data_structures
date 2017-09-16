@@ -11,19 +11,19 @@
 import pdb
 
 class BinaryTree(object):
-	def __init__(self, head=None):
-		self.head = head
+	def __init__(self, root=None):
+		self.root = root
 
 	def add_child(self, value=None):
 		# Algorithm
-		# if head doesn't exist, add it
+		# if root doesn't exist, add it
 		# if left node is empty of root, add it else try right
 		# if both are full, add them to the queue and check if their children exist
 		placed = False
-		if self.head is None:
-			self.head = Node(value)
+		if self.root is None:
+			self.root = Node(value)
 		else:
-			node_queue = [self.head]
+			node_queue = [self.root]
 			while placed == False:
 				# left is empty
 				node = node_queue.pop(0)
@@ -45,9 +45,9 @@ class BinaryTree(object):
 
 	def print_tree(self, row_values=[]):
 		new_row_values = []
-		if row_values[0][0] == self.head:
+		if row_values[0][0] == self.root:
 			nodes = [row_values[0][0]]
-			print self.head.value
+			print self.root.value
 		else:
 			nodes = [i for sub in row_values for i in sub if i is not None]
 			print " ".join("("+str(getattr(x,'value', 'None'))+" "+str(getattr(y,'value', 'None'))+")" for x,y in row_values)
@@ -57,8 +57,9 @@ class BinaryTree(object):
 			return 
 		return self.print_tree(new_row_values)
 
+# ALSO RETURN PARENT (DO THIS WITH DFS INSTEAD)
 	def find(self, value):
-		queue = [self.head]
+		queue = [self.root]
 		while len(queue) > 0:
 			node = queue.pop(0)
 			if node.value == value:
@@ -70,13 +71,15 @@ class BinaryTree(object):
 					queue.append(node.right)
 		return None
 
+# REMOVE
 	def find_parent(self, value):
+		queue = [self.root]
 		while len(queue) > 0:
 			node = queue.pop(0)
 			if get_attr(node, 'left.value', None) == value:
-				return node
+				return [node, 'left']
 			if get_attr(node, 'right.value', None) == value:
-				return node
+				return [node, 'right']
 			else:
 				if node.left is not None:
 					queue.append(node.left)
@@ -84,14 +87,89 @@ class BinaryTree(object):
 					queue.append(node.right)
 		return None
 
-	def delete(self, value):
+		node = Node()
+		node.value = 5;
+		self.dosomething(node)
+		print node.value
+
+		def dosomething(self, node):
+			node = Node()
+			node.value = 4
+
+	def smallest(self, smallest=None, queue=[]):
+		if len(queue) == 0:
+			return smallest
+		else:
+			node = queue.pop(0)
+			if node.value < smallest.value:
+				smallest = node
+			for child in [node.left, node.right]:
+				if child is not None:
+					queue.append(child)
+			return self.smallest(smallest, queue)
+
+	def smallest_minimal(self, node):
+		l = [getattr(node, 'value', 0)]
+		for child in [node.right, node.left]:
+			if child is not None:
+				l.append(t.smallest_minimal(child))
+		return min(l)
+
+	def bfs(self):
+		queue = [self.root]
+		s = ""
+		while len(queue) > 0:
+			node = queue.pop(0)
+			s += str(node.value) + " "
+			for child in [node.right, node.left]:
+				if child is not None:
+					queue.append(child)
+		return s
+
+	def dfs(self, node):
+		l = [str(node.value)]
+		for child in [node.right, node.left]:
+			if child is not None:
+				l.append(self.dfs(child))
+		return " ".join(l) 
+
+
+	def delete(self):
 		node = self.find(value)
-		parent = self.find_parent(value)
+		parent, position = self.find_parent(value)
 		## Cases
 		# if root
-		# if has 1 child
-		# if has 2 children
+		if self.value == value:
+			self.value = node.left
 		# if has no children
+		elif node.left is None and node.right is None:
+			parent[position] = None
+		# if has 1 child
+		elif node.left is None or node.right is None:
+			parent[position] = getattr(node, 'left', node.right)
+		# if has 2 children
+		# find smallest value in right and replace original node with it. 
+		elif node.left is not None and node.right is not None:
+			parent[position].right = self.smallest(node.right)
+			self.smallest(smallest=node.right, queue=[node.right])
+
+	def max_heap(self):
+		"""Heap just guarantees that elements on higher levels are greater 
+		(for max-heap) or smaller (for min-heap) than elements on lower levels, 
+		whereas BST guarantees order (from "left" to "right")."""
+		pass
+
+	def min_heap(self, value):
+		# this is adding a single element to a tree that maintains heap
+		# Reminder: dont do min and max since they are the same
+		pass
+
+	def binary_add(self, value):
+		# Algorithm:
+		# is the left > right branch of this tree, 
+			# if not, swap, 
+		# iterate (recursively)
+		pass 
 
 
 
@@ -114,13 +192,20 @@ t.add_child(5)
 t.add_child(2)
 t.add_child(9)
 t.add_child(3)
-t.add_child(2)
 t.add_child(1)
-t.add_child(8)
-t.add_child(3)
-t.add_child(2)
-t.add_child(1)
-t.add_child(8)
-t.add_child(3)
-t.print_tree([(t.head, None)])
+# t.add_child(13)
+# t.add_child(8)
+# t.add_child(3)
+# t.add_child(2)
+# t.add_child(1)
+# t.add_child(8)
+# t.add_child(3)
+# find()
+t.print_tree([(t.root, None)])
+print t.smallest(t.root, [t.root]).value
+print t.smallest_minimal(t.root)
+print t.dfs(t.root)
+print t.bfs()
+# t.find_parent(5)
+# t.print_tree([(t.root, None)])
 
