@@ -57,8 +57,25 @@ class BinaryTree(object):
 			return 
 		return self.print_tree(new_row_values)
 
+
 # ALSO RETURN PARENT (DO THIS WITH DFS INSTEAD)
-	def find(self, value):
+	def find_dfs(self, [parent], value):
+
+		parent = parent.right == value 
+		parent = parent.left == value
+		return self.find_dfs([parent], value)
+		while len(queue) > 0:
+			node = queue.pop(0)
+			if node.value == value:
+				return node
+			else:
+				if node.left is not None:
+					queue.append(node.left)
+				if node.right is not None:
+					queue.append(node.right)
+		return None
+
+	def find_dfs(self, value):
 		queue = [self.root]
 		while len(queue) > 0:
 			node = queue.pop(0)
@@ -71,30 +88,6 @@ class BinaryTree(object):
 					queue.append(node.right)
 		return None
 
-# REMOVE
-	def find_parent(self, value):
-		queue = [self.root]
-		while len(queue) > 0:
-			node = queue.pop(0)
-			if get_attr(node, 'left.value', None) == value:
-				return [node, 'left']
-			if get_attr(node, 'right.value', None) == value:
-				return [node, 'right']
-			else:
-				if node.left is not None:
-					queue.append(node.left)
-				if node.right is not None:
-					queue.append(node.right)
-		return None
-
-		node = Node()
-		node.value = 5;
-		self.dosomething(node)
-		print node.value
-
-		def dosomething(self, node):
-			node = Node()
-			node.value = 4
 
 	def smallest(self, smallest=None, queue=[]):
 		if len(queue) == 0:
@@ -121,14 +114,14 @@ class BinaryTree(object):
 		while len(queue) > 0:
 			node = queue.pop(0)
 			s += str(node.value) + " "
-			for child in [node.right, node.left]:
+			for child in [node.left, node.right]:
 				if child is not None:
 					queue.append(child)
 		return s
 
 	def dfs(self, node):
 		l = [str(node.value)]
-		for child in [node.right, node.left]:
+		for child in [node.left, node.right]:
 			if child is not None:
 				l.append(self.dfs(child))
 		return " ".join(l) 
@@ -152,6 +145,14 @@ class BinaryTree(object):
 		elif node.left is not None and node.right is not None:
 			parent[position].right = self.smallest(node.right)
 			self.smallest(smallest=node.right, queue=[node.right])
+
+	def least_common_ancestor(self):
+		pass
+
+	def farthest_distance_between_two_nodes(self):
+		# return nodes
+		pass
+
 
 	def max_heap(self):
 		"""Heap just guarantees that elements on higher levels are greater 
