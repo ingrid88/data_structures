@@ -146,7 +146,13 @@ class BinaryTree(object):
 			parent[position].right = self.smallest(node.right)
 			self.smallest(smallest=node.right, queue=[node.right])
 
-	def least_common_ancestor(self):
+	def least_common_ancestor(self, node_1, node_2):
+		# how far is node_1 from root
+		r = self.root
+		# Algorithm
+		# how far is node_2 from root
+		# get difference, go through farther one to same level as close one
+		# move up and checkif parents are equal and return when parents of both are equal
 		pass
 
 	def farthest_distance_between_two_nodes(self):
