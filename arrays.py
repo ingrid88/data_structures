@@ -22,18 +22,56 @@ def can_decompose(st):
     for j in range(len(st) + 1):
         if st[0:j] in words:
             if can_decompose(st[j:len(st) + 1]):
+                # print st[0:j]
                 return True
     return False
-        
-def find(st, words):
+
+
+def words_found(s):
+    if len(s) == 0:
+        return ''
+
+    for j in range(len(s) + 1):
+        if (s[0:j] in words) and (words_found(s[j:len(s) + 1]) is not None): 
+            return s[0:j] + "," + words_found(s[j:len(s) + 1])
+    return None
+
+# f(s) = {
+    # return words separated by commas if a composition is possible
+    #  else return None
+# }
+
+def print_combos(s, word_list=''):
+
+    count = 0
+    if len(s) == 0:
+        print 'word list'
+        print word_list
+        word_list = ''
+        return 1
+    for j in range(len(s) + 1):
+        if s[0:j] in words: 
+            variants_count = print_combos(s[j:len(s) + 1], word_list +"."+ s[0:j])
+            if variants_count > 0:
+                count += variants_count
+
+    return count
+
+
+def number_of_variants_found(st, words):
     # print st
     count = 0
     if len(st) == 0:
+        print "len st 0"
         return 1
 # True if exists a prefix w of s that belongs to dict and f(s without the prefix w) is True,
     for j in range(len(st) + 1):
-        if st[0:j] in words and find(st[j:len(st) + 1], words) > 0:
-                count += find(st[j:len(st) + 1], words)
+        if st[0:j] in words:
+
+            variants_count = number_of_variants_found(st[j:len(st) + 1], words)
+            if variants_count > 0:
+                print st[0:j]
+                count += variants_count
     return count
 
 # f(s) = {
@@ -60,23 +98,34 @@ words = {
 "and",
 "come",
 "hand"}
-s = "take"
-# print can_decompose(s)
-print find(s, words)
+# s = "take"
 
-s = "takebathandcome"
 # print can_decompose(s)
-print find(s, words)
-
+# print "{} variants found".format(number_of_variants_found(s, words))
+# print words_found(s)
+# print words_found2(s)
+# s = "takebathandcome"
+# print can_decompose(s)
+# print "{} variants found".format(number_of_variants_found(s, words))
+# print words_found(s)
+# print words_found2(s)
 s = "takebathandcomecat"
+# print word_combos(s)
 # print can_decompose(s)
-print find(s, words)
-s = "takebathandcomes"
+print print_combos(s)
+# print "{} variants found".format(number_of_variants_found(s, words))
+# print words_found(s)
+# print words_found2(s)
+# s = "takebathandcomes"
 # print can_decompose(s)
-print find(s, words)
-s = "takeathandcomes"
+# print "{} variants found".format(number_of_variants_found(s, words))
+# print words_found(s)
+# print words_found2(s)
+# s = "takeathandcomes"
 # print can_decompose(s)
-print find(s, words)
+# print "{} variants found".format(number_of_variants_found(s, words))
+# print words_found(s)
+# print words_found2(s)
 
 
 ##########################
