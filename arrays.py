@@ -275,17 +275,27 @@ class Arry(object):
                 d[char] = 1
         return d
 
-    def generate_permutations(d, st=''):
+    def generate_permutations(self, dic, st=''):
         # new_d = d
         # when dictionary is empty (or all are zero)
-        if not d:
+        # dic = dict(d)
+        if sum(dic.values()) <= 0:
+            # import pdb; pdb.set_trace()
             print st
+            return
 
-        for key in d.keys():
-            d[key] -= 1
-            generate_permutations(d, st+key)
-            if d[key] <= 0:
-                del d[key]
+        for key in dic.keys():
+            # import pdb; pdb.set_trace()
+            if dic[key] > 0:
+                # print "next step: key - {} dict - {} string - {}".format(key, dic, st)
+                dic[key] -= 1
+
+                self.generate_permutations(dic, st+key)
+                dic[key] += 1
+                # print "after next step: key - {} dict - {} string - {}".format(key, dic, st)
+                # d.pop(key, 0)
+            
+
 
 
 
@@ -308,7 +318,12 @@ class Arry(object):
 # aa bc 
 # aa cb 
 
+# ab aa
+# ab a a
+# ac aa
+# ac a a
 
+# f(2) = 2
 
 # {a:2, b:1, c:1}
 
@@ -366,12 +381,14 @@ class Arry(object):
 
 A = Arry()
 # print A.letter_count('AAB')
-d = {'A':2, 'B':1}
+d = {'A':1, 'B':1}
 s = "aaaaaaaaaaaaaaaaaaaaaaa"
 words = {
     "a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa"
 }
 
+d = {'A':4, 'B':1}
+A.generate_permutations(d)
 # print A.number_of_variants_with_caching(s)
 # print A.number_of_variants_found(s, words)
 # print A.number_of_variants_found(s, words)
