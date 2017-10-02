@@ -54,7 +54,7 @@ class Arry(object):
 
         return None
 
-
+# cache so it isn't exponential 
     def number_of_variants_found(self, st, words):
         # f(s) = {
         #     // returns true iff the s is decomposable with words from the dictionary
@@ -64,17 +64,41 @@ class Arry(object):
         # }
         count = 0
         if len(st) == 0:
-            print "len st 0"
             return 1
         # True if exists a prefix w of s that belongs to dict and f(s without the prefix w) is True,
         for j in range(len(st) + 1):
             if st[0:j] in words:
-
                 variants_count = self.number_of_variants_found(st[j:len(st) + 1], words)
-                if variants_count > 0:
-                    print st[0:j]
-                    count += variants_count
+                count += variants_count
+        # print "number_of_variants_found called for st " + st + " returns " + str(count)
         return count
+
+# WITHOUT USELESS CALCULATIONS eg. 'aaaa' with {a, aa, aaa, ...} as words
+    def number_of_variants_with_caching(self, st, d={}):
+        count = 0
+        if len(st) == 0:
+            return 1
+
+        for j in range(len(st) + 1):
+            key = len(st) - j
+            if st[0:j] in words:
+                # import pdb; pdb.set_trace()
+                if key in d:
+                    variants_count = d[key]
+                    count += variants_count
+                else:
+                    variants_count = self.number_of_variants_with_caching(st[j:len(st) + 1], d)
+                    # print variants_count
+                    d[key] = variants_count
+                    count += variants_count
+        # print "number_of_variants_found called for st " + st + " returns " + str(count)
+        return count
+
+# aa
+
+# a a
+# aa
+
 
     def find_grants_cap(self, grantsArray, newBudget):
       # algorithm: 
@@ -215,21 +239,24 @@ class Arry(object):
     # kw // k = 11, w = 23
 
     def generated_strings(self, string_number="1123", output=''):
-
+        print 'entered method, output is ' + output
         if len(string_number) == 0:
             print ''.join([chr(int(x)+96) for x in output.strip(".").split(".")])
             output = ''
-            return None
+            print 'printed and exited, output ' + output
+            return
 
         for j in range(1,len(string_number) + 1):
             # print s[0:j]
             if int(string_number[0:j]) in range(1,27): 
+                print 'invoking recursion, output is ' + output + ' and invoking with ' + (output +"."+ string_number[0:j])
                 self.generated_strings(
                     string_number[j:len(string_number) + 1], 
                     output +"."+ string_number[0:j]
                 )
-
-        return None
+                print 'recursion finished, output is ' + output
+        print 'exited method with output is ' + output
+        return
 
 # >>> ord('a')
 # 697
@@ -238,9 +265,83 @@ class Arry(object):
 
     ###############################
 
-    def K_distance_arrangement(self, s):
+    def letter_count(self, s):
+        # import pdb; pdb.set_trace()
+        d = {}
+        for char in s:
+            if char in d:
+                d[char] += 1
+            else:
+                d[char] = 1
+        return d
+
+    def generate_permutations(d, st=''):
+        # new_d = d
+        # when dictionary is empty (or all are zero)
+        if not d:
+            print st
+
+        for key in d.keys():
+            d[key] -= 1
+            generate_permutations(d, st+key)
+            if d[key] <= 0:
+                del d[key]
+
+
+
+
+# aabc
+
+# {a:2, c:1}
+# b aca 
+# b aac 
+# b caa 
+
+
+
+# ab ac 
+# ab ca 
+
+# ac ab 
+# ac ba
+
+# aa bc 
+# aa cb 
+
+
+
+# {a:2, b:1, c:1}
+
+           # print the perm 
+        #  else
+            # add character from dictionary to string
+            # decrease character count, if count == 0 then remove  
+            # new_d[character] -= 1
+            # continue recursion with generate_permutations(new_d, perm+=character)
+
         pass
-    # Given a string S, and an integer K, rearrange the string such that similar characters are at least K distance apart.
+
+    def K_distance_arrangement(self, s, K):
+        # Algorithm: {
+            # Make a dictionary with letter Key and count Value
+            # OR try all possibilities?!?!
+            # 
+            #  for any letters if (total_letters - #_letters) < (#_letters-1) * K then return false
+            #  where only 1 unique letter can have the #_letters - 1 (all rest are just *letters*K). 
+            # (the -1 is for a letter that remains on the outside of the list)
+            # 
+        # }
+        d = self.letter_count(s)
+        unique_letters = d.keys()
+        total_letters = len(s)
+
+        # generate all permutations possible
+        permutations_list = generate_permutations(d)
+
+
+        pass
+    # Given a string S, and an integer K, rearrange the string such that 
+    # similar characters are at least K distance apart.
 
     # Example:
 
@@ -252,21 +353,36 @@ class Arry(object):
     # S = AAADBBCC, K = 2:
     # Result: ABCABCDA
 
+# def meh(d, s):
+#     d['a'] = 2
+#     s = 'c'
+#     pass;
+
+# d = {}
+# s = 'ssss'
+# meh(d, s)
+# print d
+# print s
+
 A = Arry()
-A.generated_strings(string_number="1123", output='')
+# print A.letter_count('AAB')
+d = {'A':2, 'B':1}
+s = "aaaaaaaaaaaaaaaaaaaaaaa"
+words = {
+    "a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa"
+}
+
+# print A.number_of_variants_with_caching(s)
+# print A.number_of_variants_found(s, words)
+# print A.number_of_variants_found(s, words)
+# print A.generate_permutations(d)
+# output = ['AAB', 'BAA', 'ABA']
+
+# A.generated_strings(string_number="1123", output='')
 
 #  TEST OUT CODE
 
-words = {
-    "take",
-    "bat",
-    "cat",
-    "tak",
-    "bath",
-    "and",
-    "come",
-    "hand"
-}
+
 # A = Arry()
 # s = "takebathandcomecat"
 # A.print_combos(s, word_list='')
