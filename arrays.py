@@ -257,7 +257,7 @@ class Arry(object):
                 print 'recursion finished, output is ' + output
         print 'exited method with output is ' + output
         return
-
+    
 # >>> ord('a')
 # 697
 # >>> ord('z')
@@ -276,85 +276,42 @@ class Arry(object):
         return d
 
     def generate_permutations(self, dic, st=''):
-        # new_d = d
-        # when dictionary is empty (or all are zero)
-        # dic = dict(d)
+        l = []
         if sum(dic.values()) <= 0:
-            # import pdb; pdb.set_trace()
             print st
-            return
-
+            return l.append(st)
         for key in dic.keys():
-            # import pdb; pdb.set_trace()
             if dic[key] > 0:
-                # print "next step: key - {} dict - {} string - {}".format(key, dic, st)
                 dic[key] -= 1
-
                 self.generate_permutations(dic, st+key)
                 dic[key] += 1
-                # print "after next step: key - {} dict - {} string - {}".format(key, dic, st)
-                # d.pop(key, 0)
-            
-
-
-
-
-
-# aabc
-
-# {a:2, c:1}
-# b aca 
-# b aac 
-# b caa 
-
-
-
-# ab ac 
-# ab ca 
-
-# ac ab 
-# ac ba
-
-# aa bc 
-# aa cb 
-
-# ab aa
-# ab a a
-# ac aa
-# ac a a
-
-# f(2) = 2
-
-# {a:2, b:1, c:1}
-
-           # print the perm 
-        #  else
-            # add character from dictionary to string
-            # decrease character count, if count == 0 then remove  
-            # new_d[character] -= 1
-            # continue recursion with generate_permutations(new_d, perm+=character)
-
-        pass
+        return l
 
     def K_distance_arrangement(self, s, K):
-        # Algorithm: {
-            # Make a dictionary with letter Key and count Value
-            # OR try all possibilities?!?!
-            # 
-            #  for any letters if (total_letters - #_letters) < (#_letters-1) * K then return false
-            #  where only 1 unique letter can have the #_letters - 1 (all rest are just *letters*K). 
-            # (the -1 is for a letter that remains on the outside of the list)
-            # 
-        # }
         d = self.letter_count(s)
-        unique_letters = d.keys()
-        total_letters = len(s)
+        permutations = self.generate_permutations(d)
+        import pdb; pdb.set_trace()
+        pass 
 
-        # generate all permutations possible
-        permutations_list = generate_permutations(d)
+    # def K_distance_arrangement(self, s, K):
+    #     # Algorithm: {
+    #         # Make a dictionary with letter Key and count Value
+    #         # OR try all possibilities?!?!
+    #         # 
+    #         #  for any letters if (total_letters - #_letters) < (#_letters-1) * K then return false
+    #         #  where only 1 unique letter can have the #_letters - 1 (all rest are just *letters*K). 
+    #         # (the -1 is for a letter that remains on the outside of the list)
+    #         # 
+    #     # }
+    #     d = self.letter_count(s)
+    #     unique_letters = d.keys()
+    #     total_letters = len(s)
+
+    #     # generate all permutations possible
+    #     permutations_list = generate_permutations(d)
 
 
-        pass
+    #     pass
     # Given a string S, and an integer K, rearrange the string such that 
     # similar characters are at least K distance apart.
 
@@ -387,8 +344,9 @@ words = {
     "a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa"
 }
 
-d = {'A':4, 'B':1}
-A.generate_permutations(d)
+d = {'A':4, 'B':1, 'C':1}
+# A.generate_permutations(d)
+A.K_distance_arrangement('AAABBBCC', 3)
 # print A.number_of_variants_with_caching(s)
 # print A.number_of_variants_found(s, words)
 # print A.number_of_variants_found(s, words)
