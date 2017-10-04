@@ -23,12 +23,13 @@ def sudoku_solve(board):
       if board[row][col] == '.':
         # input some value
         for i in range(1,10):
-          board[row][col] = str(i)
-          print "adding value {}".format(i)
-          if sudoku_solve(board) == True:
-            return True
-          else:
-            board[row][col] = "."
+        	if (str(i) not in set(board[row])) and (str(i) not in set(np.array(board).T[col])):
+				board[row][col] = str(i)
+				print "adding value {}".format(i)
+				if sudoku_solve(board) == True:
+					return True
+				else:
+					board[row][col] = "."
       
   
 def is_solved(board):
