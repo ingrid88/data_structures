@@ -132,6 +132,8 @@ class Arry(object):
               cap = float(newBudget) / len(grantsArray[i+1:])
         return cap
 
+
+
     # grantsArray = [2, 100, 50, 120, 1000]
     # newBudget = 190
     # print find_grants_cap(grantsArray, newBudget)
@@ -293,6 +295,69 @@ class Arry(object):
         import pdb; pdb.set_trace()
         pass 
 
+
+    # return smallest integer greater than 1 not in A
+    def solution(A=[1,2,6,4,3]):
+        d = {}
+        for i, value in enumerate(A):
+            if i == 0:
+                if value == 1:
+                    d[1] = 1
+                    soln = 2
+                else:
+                    d[value] = 1
+                    soln = 1
+            else:
+                d[value] = 1
+                if value == soln:
+                    # print d
+                    while soln in d:
+                        soln += 1
+        return soln
+
+    def fee_charge(self, S='00:03:13,201-742-2104\n00:03:13,201-742-2104\n00:07:13,202-742-2104\n'):
+        fee = 0
+        calls = S.split()
+        d = {}
+
+        for call in calls:
+
+            duration, number = call.split(",")
+            hours, minutes, seconds = duration.split(":")
+            total_seconds = int(hours)*60*60 + int(minutes)*60 + int(seconds)
+            running_fee = 0
+            if total_seconds < 5*60:
+                running_fee += 3*total_seconds
+            else:
+                running_fee += 150*(int(hours)*60 + int(minutes))
+                if int(seconds) > 0:
+                    running_fee += 150
+
+            if number not in d:
+                d[number] = (total_seconds, running_fee)
+            else:
+                ts, r = d[number]
+                d[number] = (ts+total_seconds, r+running_fee)
+            fee += running_fee
+
+        max_caller_fee = 0
+        max_caller_duration = 0
+        max_caller_number = None
+        for key, value in d.iteritems():
+            ts, r = value
+            if max_caller_duration < ts:
+                max_caller_duration = ts
+                max_caller_fee = r
+                max_caller_number = key 
+            if max_caller_duration == ts:
+                if int("".join(max_caller_number.split(":"))) > int("".join(key.split(":"))):
+                    max_caller_fee = r
+                    max_caller_duration = ts
+                    max_caller_number = key
+
+        return fee - max_caller_fee
+
+print fee_charge('00:03:13,201-742-2104\n00:03:13,201-742-2104\n00:07:13,202-742-2104\n')
     # def K_distance_arrangement(self, s, K):
     #     # Algorithm: {
     #         # Make a dictionary with letter Key and count Value

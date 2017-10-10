@@ -29,6 +29,7 @@ def sudoku_solve(board):
 				if sudoku_solve(board) == True:
 					return True
 				else:
+					# re-add . to position where number was incorrectly added to board
 					board[row][col] = "."
       
   
