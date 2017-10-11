@@ -357,7 +357,89 @@ class Arry(object):
 
         return fee - max_caller_fee
 
-print fee_charge('00:03:13,201-742-2104\n00:03:13,201-742-2104\n00:07:13,202-742-2104\n')
+# print fee_charge('00:03:13,201-742-2104\n00:03:13,201-742-2104\n00:07:13,202-742-2104\n')
+    def stock_bids(self, market):
+        # return buy and sell values
+        # markets = [(0, 3), (1, 10), (2, 900)]
+        buy_price = None
+        profit = 0
+        for time, value in market:
+            if time == 0:
+                buy_price = value
+            if value - buy_price > profit:
+                profit = value - buy_price
+            if value < buy_price:
+                buy_price = value 
+
+        return profit
+
+    def array_of_array_products(self, arr): # O(n^2)
+      l = []
+      if len(arr) <= 1:
+        return []
+      
+      for i in range(len(arr)):
+        left = arr[i+1:]
+        right = arr[:i]
+        prod = 1  
+        for segment in [left, right]:
+          if len(segment) > 0:
+            prod *= reduce(lambda x, y: x*y, segment)
+        l.append(prod)  
+            
+      return l
+
+    def array_of_array_products(self, arr): #O(n^2)
+
+        p = [1]*len(arr)
+        #s = [1]*len(arr)
+
+        for i in range(len(arr)):
+            a = arr[:i] + [1] + arr[i+1:]
+            p *= a
+
+        return p
+
+    def array_of_array_products(self, arr): #O(n)
+        p = []
+        s = []
+
+        #p[i] = product of all numbers up to i = product of arr[:i]
+        #s[i] = product of all numbers from i+1 onwards = product of arr[i+1:]
+        product = 1
+        for i in range(len(arr)):
+            p.append(product)
+            product *= arr[i]
+
+        product = 1
+        for i in reversed(range(len(arr))):
+            s.append(product)
+            product *= arr[i]
+        s = s[::-1]
+        return [p[i]*x for i,x in enumerate(s)]
+
+    def condensed_ranges(self, ranges):
+        i = 0
+        j = 0
+
+        while i < len(ranges) and j < len(ranges):
+            first_start = ranges[i][0]
+            first_finish = ranges[i][1]
+
+            second_start = ranges[j+1][0]
+            second_finish = ranges[j+1][1]
+
+            if first_end < second_start:
+                # no overlap
+                j += 1
+
+            if first_end > second_end and first_start < second_start:
+                continue
+            if first_end > second_end and first_start > second_start and first_start < second_end:
+                continue
+            
+        pass
+
     # def K_distance_arrangement(self, s, K):
     #     # Algorithm: {
     #         # Make a dictionary with letter Key and count Value
@@ -402,6 +484,9 @@ print fee_charge('00:03:13,201-742-2104\n00:03:13,201-742-2104\n00:07:13,202-742
 # print s
 
 A = Arry()
+print A.array_of_array_products([1,2,3,4])
+#print A.condensed_ranges([(0, 1), (3, 5), (4, 8), (10, 12), (9, 10)])
+# print A.stock_bids([ (0,1000), (2, 3), (1, 10), (2, 1), (3, 900), (4,10)])
 # print A.letter_count('AAB')
 d = {'A':1, 'B':1}
 s = "aaaaaaaaaaaaaaaaaaaaaaa"
@@ -411,7 +496,7 @@ words = {
 
 d = {'A':4, 'B':1, 'C':1}
 # A.generate_permutations(d)
-A.K_distance_arrangement('AAABBBCC', 3)
+#A.K_distance_arrangement('AAABBBCC', 3)
 # print A.number_of_variants_with_caching(s)
 # print A.number_of_variants_found(s, words)
 # print A.number_of_variants_found(s, words)
