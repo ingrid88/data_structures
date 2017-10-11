@@ -2,8 +2,9 @@
 
 
 
-def napsack(bag_size, objects):
+def nap_sack(bag_size, objects):
 	# fill bag as much as possible without going over its size (can't reuse the objects)
+	
 	pass
 
 
