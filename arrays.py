@@ -416,7 +416,17 @@ class Arry(object):
             s.append(product)
             product *= arr[i]
         s = s[::-1]
-        return [p[i]*x for i,x in enumerate(s)]
+        # return [p[i]*x for i,x in enumerate(s)]
+
+        i = 0
+        p = 1
+        while i < len(arr)-1:
+            s[i] = p * s[i]
+            p *= arr[i]
+            i += 1
+        s[i] = p
+
+        return s
 
     def condensed_ranges(self, ranges):
         i = 0
